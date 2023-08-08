@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -9,53 +8,54 @@ import (
 )
 
 type animal struct {
-	id            int
-	name          string
-	cientificName string
-	pictureURL    string
-}
-
-var animals = []animal{
-	{
-		id: 1,
-		name: "",
-		cientificName: "",
-		pictureURL: "",
-	},
-	{
-		id: 2,
-		name: "",
-		cientificName: "",
-		pictureURL: "",
-	},
-	{
-		id: 3,
-		name: "",
-		cientificName: "",
-		pictureURL: "",
-	},
-	{
-		id: 4,
-		name: "",
-		cientificName: "",
-		pictureURL: "",
-	},
+	ID            int    `json:"ID"`
+	Name          string `json:"Name"`
+	CientificName string `json:"cientific_Name"`
+	PictureURL    string `picture_url`
 }
 
 func main() {
 	e := echo.New()
 
-	jsonData, err := json.Marshal(animals)
-	if err != nil {
-		fmt.Println("Erro ao converter para JSON:", err)
-		return
-	}
-
 	e.GET("/", hello)
+	e.GET("/animals", getAnimals)
 
 	e.Start(":8080")
 }
 
 func hello(c echo.Context) error {
 	return c.String(http.StatusOK, "Olá, mundo!")
+}
+
+func getAnimals(c echo.Context) error {
+	animals := []animal{
+		{
+			ID:            1,
+			Name:          "Sapo-comum-do-sul",
+			CientificName: "Bufo regularis",
+			PictureURL:    "https://images.app.goo.gl/Fk811Bd3obN6qvt26",
+		},
+		{
+			ID:            2,
+			Name:          "Boto-cor-de-rosa",
+			CientificName: "Inia geoffrensis",
+			PictureURL:    "https://images.app.goo.gl/YSur1sdEdCrp6Rr18",
+		},
+		{
+			ID:            3,
+			Name:          "Camarão-pistola",
+			CientificName: "AlpheIDae ",
+			PictureURL:    "https://images.app.goo.gl/xBuM5SJCG2ybM3E47",
+		},
+		{
+			ID:            4,
+			Name:          "Urubu",
+			CientificName: "Coragyps atratus",
+			PictureURL:    "https://images.app.goo.gl/pxpGT2VrQqS1Bq1P7",
+		},
+	}
+
+	fmt.Println(animals)
+
+	return c.JSON(http.StatusOK, animals)
 }
